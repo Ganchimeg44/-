@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mini Racing Game</title>
+
+<style>
+
+body{
+background:#222;
+color:white;
+font-family:sans-serif;
+text-align:center;
+}
+
+.track{
+width:420px;
+height:600px;
+background:#555;
+margin:auto;
+position:relative;
+overflow:hidden;
+border:4px solid white;
+}
+
+.car{
+width:40px;
+height:60px;
+position:absolute;
+bottom:0;
+}
+
+#car1{background:red;left:40px}
+#car2{background:blue;left:140px}
+#car3{background:green;left:240px}
+#car4{background:yellow;left:340px}
+
+.obstacle,.boost,.slow{
+width:40px;
+height:40px;
+position:absolute;
+left:180px;
+}
+
+.obstacle{background:black;top:250px}
+.boost{background:cyan;top:150px}
+.slow{background:purple;top:400px}
+
+button{
+font-size:18px;
+padding:10px;
+margin:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🏎 Racing Game</h1>
+
+<div class="track">
+
+<div id="car1" class="car"></div>
+<div id="car2" class="car"></div>
+<div id="car3" class="car"></div>
+<div id="car4" class="car"></div>
+
+<div class="obstacle"></div>
+<div class="boost"></div>
+<div class="slow"></div>
+
+</div>
+
+<br>
+
+<button onclick="move(0)">Player 1</button>
+<button onclick="move(1)">Player 2</button>
+<button onclick="move(2)">Player 3</button>
+<button onclick="move(3)">Player 4</button>
+
+<h2 id="result"></h2>
+
+<script>
+
+let pos=[0,0,0,0]
+let speed=[1,1,1,1]
+let finish=[]
+let trackHeight=550
+
+function move(p){
+
+if(finish.includes(p)) return
+
+let move=Math.random()*25*speed[p]
+
+pos[p]+=move
+
+document.getElementById("car"+(p+1)).style.bottom=pos[p]+"px"
+
+check(p)
+
+if(pos[p]>=trackHeight){
+
+finish.push(p)
+
+if(finish.length==4) showScore()
+
+}
+
+}
+
+function check(p){
+
+if(Math.abs(pos[p]-250)<20) speed[p]=0.5
+if(Math.abs(pos[p]-150)<20) speed[p]=2
+if(Math.abs(pos[p]-400)<20) speed[p]=0.3
+
+}
+
+function showScore(){
+
+let score=[0,0,0,0]
+
+finish.forEach((p,i)=>{
+
+if(i==0) score[p]+=20
+if(i==1) score[p]+=10
+if(i==2) score[p]+=0
+if(i==3) score[p]-=10
+
+})
+
+document.getElementById("result").innerHTML=
+"1st Player "+(finish[0]+1)+"<br>"+
+"2nd Player "+(finish[1]+1)+"<br>"+
+"3rd Player "+(finish[2]+1)+"<br>"+
+"4th Player "+(finish[3]+1)+"<br><br>"+
+"Scores:<br>"+
+"P1 "+score[0]+"<br>"+
+"P2 "+score[1]+"<br>"+
+"P3 "+score[2]+"<br>"+
+"P4 "+score[3]
+
+}
+
+</script>
+
+</body>
+</html>
